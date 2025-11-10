@@ -1,10 +1,9 @@
 Trabalho Prático 2 - Transferência de Arquivos Peer-to-Peer (P2P)
 Sistemas Distribuídos - 2025
 
-=====================================================================
-1. DESCRIÇÃO GERAL
-=====================================================================
 
+## 1. DESCRIÇÃO GERAL
+   
 Este projeto implementa um sistema de transferência de arquivos baseado
 em uma arquitetura Peer-to-Peer (P2P), na qual cada nó (Peer) atua como
 cliente e servidor simultaneamente. Os arquivos são divididos em blocos
@@ -15,9 +14,7 @@ O sistema foi desenvolvido em C++17, utilizando threads (std::thread),
 sockets POSIX e sincronização via mutex. A arquitetura adota um modelo
 simétrico, onde qualquer Peer pode enviar ou receber blocos.
 
-=====================================================================
-2. TECNOLOGIAS E DEPENDÊNCIAS
-=====================================================================
+## 2. TECNOLOGIAS E DEPENDÊNCIAS
 
 Linguagem: C++17
 Bibliotecas: std::thread, std::mutex, std::filesystem, POSIX sockets
@@ -31,9 +28,7 @@ Para Windows:
 - Usar WSL (Windows Subsystem for Linux) ou Cygwin, que possuem suporte
   a sockets POSIX.
 
-=====================================================================
-3. ESTRUTURA DO PROJETO
-=====================================================================
+## 3. ESTRUTURA DO PROJETO
 
 TP2-P2P/
 ├── src/
@@ -48,9 +43,7 @@ TP2-P2P/
 ├── Makefile
 └── README.txt
 
-=====================================================================
-4. COMPILAÇÃO
-=====================================================================
+## 4. COMPILAÇÃO
 
 Para compilar o projeto, execute o comando na raiz do diretório:
 
@@ -60,9 +53,7 @@ O executável será gerado em:
 
     ./build/peer
 
-=====================================================================
-5. EXECUÇÃO PADRÃO (CENÁRIO DE TESTE)
-=====================================================================
+## 5. EXECUÇÃO PADRÃO (CENÁRIO DE TESTE)
 
 Para executar o cenário de teste padrão com três Peers (um Seeder e
 dois Leechers), utilize o comando:
@@ -85,9 +76,7 @@ O script de teste realiza as seguintes ações:
 5. Compara os resultados com o arquivo original para verificar integridade;
 6. Salva logs e resultados de verificação em build/logs/.
 
-=====================================================================
-6. EXECUÇÃO MANUAL (PEER INDIVIDUAL)
-=====================================================================
+## 6. EXECUÇÃO MANUAL (PEER INDIVIDUAL)
 
 É possível executar manualmente um Peer individual:
 
@@ -102,9 +91,7 @@ Parâmetros:
 - ID_do_Peer: número identificador único do Peer (ex: 1, 2, 3)
 - IsSeeder: 1 = verdadeiro (Seeder), 0 = falso (Leecher)
 
-=====================================================================
-7. CONFIGURAÇÃO PADRÃO DOS PEERS
-=====================================================================
+## 7. CONFIGURAÇÃO PADRÃO DOS PEERS
 
 | Peer | Porta | Função Inicial | Vizinhos Conhecidos          |
 |------|-------|----------------|------------------------------|
@@ -115,9 +102,7 @@ Parâmetros:
 A vizinhança é configurada estaticamente no código (main.cpp), de modo
 que todos os Peers se conheçam no momento da inicialização.
 
-=====================================================================
-8. COMPONENTES PRINCIPAIS
-=====================================================================
+## 8. COMPONENTES PRINCIPAIS
 
 1. Peer.cpp / Peer.h
    - Controla as threads de servidor e cliente.
@@ -138,9 +123,7 @@ que todos os Peers se conheçam no momento da inicialização.
    - Estruturas empacotadas via pragma pack e uso de htonl/ntohl
      para compatibilidade de endianness entre sistemas.
 
-=====================================================================
-9. ESTRATÉGIA DE DOWNLOAD E CONCORRÊNCIA
-=====================================================================
+## 9. ESTRATÉGIA DE DOWNLOAD E CONCORRÊNCIA
 
 Cada Peer executa duas threads principais:
 
@@ -157,9 +140,7 @@ O cliente adota uma estratégia simples:
 3. Solicita o bloco e o grava localmente.
 4. Atualiza o bitfield e passa a servir o bloco a outros Peers.
 
-=====================================================================
 10. TESTES E RESULTADOS ESPERADOS
-=====================================================================
 
 Ao executar o script de teste (make test ou ./run_test.sh), espera-se:
 
@@ -176,9 +157,7 @@ Exemplo de saída esperada no terminal:
     Peer 3: DOWNLOAD COMPLETO
     Arquivos validados com sucesso (SHA-256 idêntico)
 
-=====================================================================
-11. CONCLUSÕES
-=====================================================================
+## 11. CONCLUSÕES
 
 O projeto demonstra a aplicação prática dos conceitos de sistemas
 distribuídos e arquitetura Peer-to-Peer:
@@ -189,9 +168,7 @@ distribuídos e arquitetura Peer-to-Peer:
 - A sincronização via mutex evita condições de corrida.
 - O modelo de comunicação é simples, eficiente e escalável.
 
-=====================================================================
-12. AUTORES
-=====================================================================
+## 12. AUTORES
 
 Trabalho desenvolvido por alunos César Soares e Gabriel Quezada da disciplina de Sistemas Distribuídos
 (2025), utilizando C++17 e sockets POSIX.
