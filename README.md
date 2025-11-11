@@ -1,9 +1,8 @@
 Trabalho Prático 2 - Transferência de Arquivos Peer-to-Peer (P2P)
 Sistemas Distribuídos - 2025
 
-
 ## 1. DESCRIÇÃO GERAL
-   
+
 Este projeto implementa um sistema de transferência de arquivos baseado
 em uma arquitetura Peer-to-Peer (P2P), na qual cada nó (Peer) atua como
 cliente e servidor simultaneamente. Os arquivos são divididos em blocos
@@ -21,10 +20,12 @@ Bibliotecas: std::thread, std::mutex, std::filesystem, POSIX sockets
 Compilador: g++ versão 10 ou superior
 
 Ambiente recomendado:
+
 - Linux (Ubuntu, Debian, Fedora, etc.)
 - macOS (com clang++ 10+)
 
 Para Windows:
+
 - Usar WSL (Windows Subsystem for Linux) ou Cygwin, que possuem suporte
   a sockets POSIX.
 
@@ -32,13 +33,13 @@ Para Windows:
 
 TP2-P2P/
 ├── src/
-│   ├── main.cpp
-│   ├── Peer.cpp
-│   ├── FileHandler.cpp
-│   ├── Peer.h
-│   ├── FileHandler.h
-│   ├── Protocol.h
-│   └── ...
+│ ├── main.cpp
+│ ├── Peer.cpp
+│ ├── FileHandler.cpp
+│ ├── Peer.h
+│ ├── FileHandler.h
+│ ├── Protocol.h
+│ └── ...
 ├── run_test.sh
 ├── Makefile
 └── README.txt
@@ -88,16 +89,55 @@ Exemplo:
     ./build/peer 2 0     # Peer 2 atua como Leecher
 
 Parâmetros:
+
 - ID_do_Peer: número identificador único do Peer (ex: 1, 2, 3)
 - IsSeeder: 1 = verdadeiro (Seeder), 0 = falso (Leecher)
 
+## PASSO A PASSO MANUALMENTE
+
+0. Inicia o Seeder em primeiro plano (para ver a criação do arquivo)
+   ./build/peer 1 1
+
+# No nosso caso, o main.cpp tem um loop infinito de 10s para manter o peer vivo:
+
+# "while (true) { std::this_thread::sleep_for(std::chrono::seconds(10)); }"
+
+# Isso significa que você precisa usar CTRL+C para matar o Peer 1.
+
+# Vamos seguir a estrutura do script, mas fora dele, para ver o PID.
+
+# Certifique-se que o executável está na pasta build
+
+make all
+
+1.  Abra um terminal
+    ./build/peer 1 1 > peer1.log 2>&1 &
+    PID1=$!
+    echo "Peer 1 (Seeder) rodando com PID: $PID1"
+
+2.  Abra outro terminal
+    ./build/peer 2 0 > peer2.log 2>&1 &
+    PID2=$!
+    echo "Peer 2 (Leecher) rodando com PID: $PID2"
+
+3.  Abra outro terminal
+    ./build/peer 3 0 > peer3.log 2>&1 &
+    PID3=$!
+    echo "Peer 3 (Leecher) rodando com PID: $PID3"
+
+4.  Monitore os logs
+    tail -f peer2.log peer3.log
+
+5.  Para matar todos após o teste:
+    kill $PID1 $PID2 $PID3
+
 ## 7. CONFIGURAÇÃO PADRÃO DOS PEERS
 
-| Peer | Porta | Função Inicial | Vizinhos Conhecidos          |
-|------|-------|----------------|------------------------------|
-| 1    | 9001  | Seeder         | P2 (9002), P3 (9003)         |
-| 2    | 9002  | Leecher        | P1 (9001), P3 (9003)         |
-| 3    | 9003  | Leecher        | P1 (9001), P2 (9002)         |
+| Peer | Porta | Função Inicial | Vizinhos Conhecidos  |
+| ---- | ----- | -------------- | -------------------- |
+| 1    | 9001  | Seeder         | P2 (9002), P3 (9003) |
+| 2    | 9002  | Leecher        | P1 (9001), P3 (9003) |
+| 3    | 9003  | Leecher        | P1 (9001), P2 (9002) |
 
 A vizinhança é configurada estaticamente no código (main.cpp), de modo
 que todos os Peers se conheçam no momento da inicialização.
@@ -105,21 +145,23 @@ que todos os Peers se conheçam no momento da inicialização.
 ## 8. COMPONENTES PRINCIPAIS
 
 1. Peer.cpp / Peer.h
+
    - Controla as threads de servidor e cliente.
    - Estabelece conexões TCP com os vizinhos.
    - Solicita blocos faltantes e envia blocos disponíveis.
 
 2. FileHandler.cpp / FileHandler.h
+
    - Controla o acesso concorrente ao arquivo e ao bitfield.
    - Fragmenta o arquivo em blocos de 1024 bytes.
    - Atualiza o mapa de blocos disponíveis (bitfield) conforme downloads.
 
 3. Protocol.h
    - Define o protocolo de mensagens binárias:
-        REQ_BITMAP  -> Solicitação do bitfield
-        RES_BITMAP  -> Resposta com o bitfield
-        REQ_BLOCK   -> Solicitação de bloco
-        RES_BLOCK   -> Envio do bloco solicitado
+     REQ_BITMAP -> Solicitação do bitfield
+     RES_BITMAP -> Resposta com o bitfield
+     REQ_BLOCK -> Solicitação de bloco
+     RES_BLOCK -> Envio do bloco solicitado
    - Estruturas empacotadas via pragma pack e uso de htonl/ntohl
      para compatibilidade de endianness entre sistemas.
 
@@ -131,16 +173,18 @@ Cada Peer executa duas threads principais:
 - clientThread: conecta-se aos vizinhos e solicita blocos faltantes.
 
 A sincronização é garantida através de mutexes:
+
 - fileMutex: protege o acesso ao arquivo durante leitura e escrita.
 - bitfieldMutex: protege o mapa de blocos possuídos.
 
 O cliente adota uma estratégia simples:
+
 1. Solicita o bitfield de cada vizinho.
 2. Identifica o primeiro bloco ausente que o vizinho possui.
 3. Solicita o bloco e o grava localmente.
 4. Atualiza o bitfield e passa a servir o bloco a outros Peers.
 
-10. TESTES E RESULTADOS ESPERADOS
+5. TESTES E RESULTADOS ESPERADOS
 
 Ao executar o script de teste (make test ou ./run_test.sh), espera-se:
 

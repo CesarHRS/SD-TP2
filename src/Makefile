@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -pthread
-RC_DIR = src
+SRC_DIR = src
 BUILD_DIR = build
 TARGET = peer
 SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
