@@ -95,37 +95,41 @@ Parâmetros:
 
 ## PASSO A PASSO MANUALMENTE
 
-# 1. Inicia o Seeder em primeiro plano (para ver a criação do arquivo)
-./build/peer 1 1
+0. Inicia o Seeder em primeiro plano (para ver a criação do arquivo)
+   `./build/peer 1 1`
 
-# No nosso caso, o main.cpp tem um loop infinito de 10s para manter o peer vivo:
-# "while (true) { std::this_thread::sleep_for(std::chrono::seconds(10)); }"
-# Isso significa que você precisa usar CTRL+C para matar o Peer 1.
-# Vamos seguir a estrutura do script, mas fora dele, para ver o PID.
+ No nosso caso, o main.cpp tem um loop infinito de 10s para manter o peer vivo:
 
-# Certifique-se que o executável está na pasta build
+ `"while (true) { std::this_thread::sleep_for(std::chrono::seconds(10)); }"`
+
+ Isso significa que você precisa usar CTRL+C para matar o Peer 1.
+
+ Vamos seguir a estrutura do script, mas fora dele, para ver o PID.
+
+ Certifique-se que o executável está na pasta build
+
 make all
 
-# 1. Abre um terminal
-./build/peer 1 1 > peer1.log 2>&1 &
-PID1=$!
-echo "Peer 1 (Seeder) rodando com PID: $PID1"
+1.  Abra um terminal
+    `./build/peer 1 1 > peer1.log 2>&1 &
+    PID1=$!
+    echo "Peer 1 (Seeder) rodando com PID: $PID1"`
 
-# 2. Abre outro terminal
-./build/peer 2 0 > peer2.log 2>&1 &
-PID2=$!
-echo "Peer 2 (Leecher) rodando com PID: $PID2"
+2.  Abra outro terminal
+    `./build/peer 2 0 > peer2.log 2>&1 &
+    PID2=$!
+    echo "Peer 2 (Leecher) rodando com PID: $PID2"`
 
-# 3. Abre outro terminal
-./build/peer 3 0 > peer3.log 2>&1 &
-PID3=$!
-echo "Peer 3 (Leecher) rodando com PID: $PID3"
+3.  Abra outro terminal
+    `./build/peer 3 0 > peer3.log 2>&1 &
+    PID3=$!
+    echo "Peer 3 (Leecher) rodando com PID: $PID3"`
 
-# 4. Monitore os logs
-tail -f peer2.log peer3.log
+4.  Monitore os logs
+    `tail -f peer2.log peer3.log`
 
-# 5. Para matar todos após o teste:
-kill $PID1 $PID2 $PID3
+5.  Para matar todos após o teste:
+    `kill $PID1 $PID2 $PID3`
 
 
 ## 7. CONFIGURAÇÃO PADRÃO DOS PEERS
