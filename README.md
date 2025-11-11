@@ -98,15 +98,15 @@ Parâmetros:
 0. Inicia o Seeder em primeiro plano (para ver a criação do arquivo)
    ./build/peer 1 1
 
-# No nosso caso, o main.cpp tem um loop infinito de 10s para manter o peer vivo:
+ No nosso caso, o main.cpp tem um loop infinito de 10s para manter o peer vivo:
 
-# "while (true) { std::this_thread::sleep_for(std::chrono::seconds(10)); }"
+ "while (true) { std::this_thread::sleep_for(std::chrono::seconds(10)); }"
 
-# Isso significa que você precisa usar CTRL+C para matar o Peer 1.
+ Isso significa que você precisa usar CTRL+C para matar o Peer 1.
 
-# Vamos seguir a estrutura do script, mas fora dele, para ver o PID.
+ Vamos seguir a estrutura do script, mas fora dele, para ver o PID.
 
-# Certifique-se que o executável está na pasta build
+ Certifique-se que o executável está na pasta build
 
 make all
 
